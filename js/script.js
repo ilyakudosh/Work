@@ -4,21 +4,21 @@
 let startBtn = document.getElementById('start'),
     budgetValue = document.getElementsByClassName('budget-value')[0],
     dayBudgetValue = document.getElementsByClassName('daybudget-value')[0],
-    levelValye = document.getElementsByClassName('level-value')[0],
+    levelValue = document.getElementsByClassName('level-value')[0],
     expensesValue = document.getElementsByClassName('expenses-value')[0],
     optionalExpensesValue = document.getElementsByClassName('optionalexpenses-value')[0],
     incomeValue = document.getElementsByClassName('income-value')[0],
     monthSavingsValue = document.getElementsByClassName('monthsavings-value')[0],
     yearSavingsValue = document.getElementsByClassName('yearsavings-value')[0],
-    expensesItem = document.getElementsByClassName('expenses-item')[0],
+    expensesItem = document.getElementsByClassName('expenses-item'),
     expensesBtn = document.getElementsByTagName('button')[0],
     optionalExpensesBtn = document.getElementsByTagName('button')[1],
     countBtn = document.getElementsByTagName('button')[2],
-    optionalExpensesItem = document.querySelector('.optionalexpenses-item'),
+    optionalExpensesItem = document.getElementsByClassName('optionalexpenses-item'),
     incomeItem = document.querySelector('.choose-income'),
-    checkSavings = document.querySelector('.#savings'),
+    checkSavings = document.querySelector('#savings'),
     sumValue = document.querySelector('.choose-sum'),
-    percentValue = document.querySelector('.choose-persent'),
+    percentValue = document.querySelector('.choose-percent'),
     yearValue = document.querySelector('.year-value'),
     monthValue = document.querySelector('.month-value'),
     dayValue = document.querySelector('.day-value');
@@ -47,6 +47,7 @@ startBtn.addEventListener('click', function () {
 });
 
 expensesBtn.addEventListener('click', function () {
+    console.log(expensesItem);
     let sum = 0;
 
     for (let i = 0; i < expensesItem.length; i++) {
@@ -65,11 +66,14 @@ expensesBtn.addEventListener('click', function () {
 });
 
 optionalExpensesBtn.addEventListener('click', function () {
+    console.log(optionalExpensesItem);
+    let sum = 0;
     for (let i = 0; i < optionalExpensesItem.length; i++) {
         let opt = optionalExpensesItem[i].value;
         appData.optionalExpenses[i] = opt;
-        optionalExpensesValue.textContent += appData.optionalExpenses[i] + ' ';
+        sum += Number(appData.optionalExpenses[i]);
     }
+    optionalExpensesValue.textContent = sum;
 });
 
 countBtn.addEventListener('click', function () {
@@ -80,7 +84,7 @@ countBtn.addEventListener('click', function () {
         if (appData.moneyPerDay < 100) {
             levelValue.textContent = "Минимальный уровень достатка";
         } else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
-            levelValue.textContent = "Средний уроыень достатка";
+            levelValue.textContent = "Средний уровень достатка";
         } else if (appData.moneyPerDay > 2000) {
             levelValue.textContent = "Высокий уровень достатка";
         } else {
@@ -95,7 +99,12 @@ incomeItem.addEventListener('input', function() {
     let items = incomeItem.value;
     console.log(1);
     if (isNaN(items) || items != '') {
-    appData.income = items.split(", ");
+        const itemValues = items.split(",");
+        let sum = 0;    
+        for (let i = 0; i < itemValues.length; i++){
+            sum += Number(itemValues[i]);
+        }
+    appData.income = sum;
     incomeValue.textContent = appData.income;
     }
 });
@@ -113,7 +122,7 @@ sumValue.addEventListener('input', function(){
         let sum = +sumValue.value,
             percent = +percentValue.value;
             appData.monthInCome = sum/100/12*percent;
-            appData.monthInCome = sum/100*percent;
+            appData.yearInCome = sum/100*percent;
             monthSavingsValue.textContent = appData.monthInCome.toFixed(1);
             yearSavingsValue.textContent = appData.yearInCome.toFixed(1);
     }
@@ -124,7 +133,7 @@ percentValue.addEventListener('input', function(){
         let sum = +sumValue.value,
             percent = +percentValue.value;
             appData.monthInCome = sum/100/12*percent,
-            appData.monthInCome = sum/100*percent;
+            appData.yearInCome = sum/100*percent;
             monthSavingsValue.textContent = appData.monthInCome.toFixed(1);
             yearSavingsValue.textContent = appData.yearInCome.toFixed(1);
 
